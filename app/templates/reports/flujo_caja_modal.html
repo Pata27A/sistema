@@ -1,0 +1,22 @@
+<div class="modal fade" id="modalFlujoCaja" tabindex="-1" aria-labelledby="modalFlujoCajaLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="formFlujoCaja" method="POST" action="{{ url_for('main.reports_financial_cash_flow') }}" target="_blank">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalFlujoCajaLabel">Reporte Flujo de Caja</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <label for="fecha_desde_caja" class="form-label">Fecha Desde</label>
+          <input type="date" class="form-control" name="fecha_desde" id="fecha_desde_caja" required>
+
+          <label for="fecha_hasta_caja" class="form-label mt-3">Fecha Hasta</label>
+          <input type="date" class="form-control" name="fecha_hasta" id="fecha_hasta_caja" required>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Exportar PDF</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

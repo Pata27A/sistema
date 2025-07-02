@@ -1,0 +1,44 @@
+<!-- Modal: Ventas por Cliente -->
+<div class="modal fade" id="ventasClienteModal" tabindex="-1" aria-labelledby="ventasClienteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form id="ventasClienteForm" action="{{ url_for('main.reports_sales_by_client') }}" method="GET" target="_blank">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ventasClienteModalLabel">
+            <i class="fas fa-users me-2"></i>Reporte de Ventas por Cliente
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Fecha Desde</label>
+              <input type="date" name="start_date" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Fecha Hasta</label>
+              <input type="date" name="end_date" class="form-control" required>
+            </div>
+            <div class="col-md-8">
+              <label class="form-label">Cliente (opcional)</label>
+              <input type="text" name="cliente" class="form-control" placeholder="Nombre o RUC">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Detalle</label>
+              <select name="detalle" class="form-select">
+                <option value="no">Solo Totales</option>
+                <option value="si">Con Detalle por Factura</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-danger">
+            <i class="fas fa-file-pdf me-2"></i>Exportar PDF
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

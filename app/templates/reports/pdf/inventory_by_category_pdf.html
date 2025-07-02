@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Inventario por Categoría</title>
+<style>
+  body { font-family: Arial, sans-serif; font-size: 12px; margin: 20px; color: #333; }
+  header { text-align: center; margin-bottom: 20px; }
+  h1 { color: #007bff; }
+  h2 { color: #0056b3; margin-top: 30px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: center; }
+  th { background-color: #007bff; color: white; }
+  td.left { text-align: left; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Inventario por Categoría</h1>
+  <p>Generado por: {{ user.username }} - {{ fecha_generacion.strftime('%d/%m/%Y %H:%M:%S') }}</p>
+</header>
+
+{% for cat in categorias %}
+  <h2>{{ cat.name }}</h2>
+  {% if cat.products.count() > 0 %}
+  <table>
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Producto</th>
+        <th>Stock Actual</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in cat.products %}
+      <tr>
+        <td>{{ p.code }}</td>
+        <td class="left">{{ p.name }}</td>
+        <td>{{ p.stock_current }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p>No hay productos en esta categoría.</p>
+  {% endif %}
+{% endfor %}
+</body>
+</html>

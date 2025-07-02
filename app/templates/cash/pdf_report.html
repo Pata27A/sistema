@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte de Caja</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 12px; }
+        h2 { text-align: center; margin-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+        th { background-color: #f0f0f0; }
+        .totales { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Reporte de Caja - {{ moment.strftime('%d/%m/%Y') }}</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Hora</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+                <th>Monto</th>
+                <th>Usuario</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in movements %}
+            <tr>
+                <td>{{ m.movement_date.strftime('%H:%M') }}</td>
+                <td>{{ m.type }}</td>
+                <td>{{ m.description }}</td>
+                <td>{{ "{:,.0f}".format(m.amount).replace(",", ".") }}</td>
+                <td>{{ m.user.first_name if m.user else '' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="totales">
+        <p><strong>Total Ingresos:</strong> ₲ {{ "{:,.0f}".format(total_ingresos).replace(",", ".") }}</p>
+        <p><strong>Total Egresos:</strong> ₲ {{ "{:,.0f}".format(total_egresos).replace(",", ".") }}</p>
+        <p><strong>Balance:</strong> ₲ {{ "{:,.0f}".format(balance).replace(",", ".") }}</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-truck me-2"></i>Compras</h2>
+    <a href="{{ url_for('main.purchases_new') }}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Nueva Compra
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <form method="GET" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Fecha Desde</label>
+                <input type="date" name="start_date" class="form-control" value="{{ request.args.get('start_date', '') }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Fecha Hasta</label>
+                <input type="date" name="end_date" class="form-control" value="{{ request.args.get('end_date', '') }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">&nbsp;</label>
+                <button type="submit" class="btn btn-outline-secondary d-block">
+                    <i class="fas fa-filter me-2"></i>Filtrar
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="card-body">
+        {% if purchases.items %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Factura</th>
+                            <th>Fecha</th>
+                            <th>Proveedor</th>
+                            <th>Subtotal</th>
+                            <th>IVA</th>
+                            <th>Total</th>
+                            <th>Usuario</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for purchase in purchases.items %}
+                        <tr>
+                            <td><code>{{ purchase.invoice_number }}</code></td>
+                            <td>{{ purchase.purchase_date.strftime('%d/%m/%Y %H:%M') }}</td>
+                            <td>{{ purchase.supplier.name }}</td>
+                            <td>{{ purchase.subtotal|currency }}</td>
+                            <td>{{ (purchase.iva_5 + purchase.iva_10)|currency }}</td>
+                            <td><strong>{{ purchase.total|currency }}</strong></td>
+                            <td>{{ purchase.user.first_name }}</td>
+                            <td>
+                                {% if purchase.status == 'completed' %}
+                                    <span class="badge bg-success">Completada</span>
+                                {% else %}
+                                    <span class="badge bg-warning">{{ purchase.status.title() }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Totals Summary -->
+            {% set total_purchases = purchases.items|sum(attribute='total') %}
+            {% if total_purchases %}
+            <div class="row mt-3">
+                <div class="col-md-6 offset-md-6">
+                    <div class="card bg-light">
+                        <div class="card-body text-end">
+                            <h6>Total del Período: <strong>{{ total_purchases|currency }}</strong></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Pagination -->
+            {% if purchases.pages > 1 %}
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if purchases.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('main.purchases_list', page=purchases.prev_num, start_date=request.args.get('start_date'), end_date=request.args.get('end_date')) }}">Anterior</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for page in purchases.iter_pages() %}
+                        {% if page %}
+                            {% if page != purchases.page %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('main.purchases_list', page=page, start_date=request.args.get('start_date'), end_date=request.args.get('end_date')) }}">{{ page }}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ page }}</span>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if purchases.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('main.purchases_list', page=purchases.next_num, start_date=request.args.get('start_date'), end_date=request.args.get('end_date')) }}">Siguiente</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-truck fa-3x text-muted mb-3"></i>
+                <h5>No se encontraron compras</h5>
+                <p class="text-muted">No hay compras registradas en el período seleccionado.</p>
+                <a href="{{ url_for('main.purchases_new') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Registrar Compra
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

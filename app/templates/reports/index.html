@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-chart-bar me-2"></i>Reportes y Estadísticas</h2>
+</div>
+
+<div class="row">
+    <!-- Reportes de Ventas -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-shopping-cart me-2"></i>Reportes de Ventas</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="#" id="btnVentasPorPeriodo" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1"><i class="fas fa-chart-line me-2"></i>Ventas por Período</h6>
+                            <span class="badge bg-primary">Popular</span>
+                        </div>
+                        <p class="mb-1">Reporte detallado de ventas con filtros de fecha.</p>
+                    </a>
+
+                    <a href="{{ url_for('main.reports_sales_top_products') }}" class="list-group-item list-group-item-action" target="_blank" id="btnProductosMasVendidos">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1"><i class="fas fa-trophy me-2"></i>Productos Más Vendidos</h6>
+                        </div>
+                        <p class="mb-1">Top de productos con mayor rotación.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reportes de Inventario -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-boxes me-2"></i>Reportes de Inventario</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="{{ url_for('main.reports_inventory_low_stock') }}" class="list-group-item list-group-item-action" target="_blank" id="btnStockBajo">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1"><i class="fas fa-exclamation-triangle me-2"></i>Stock Bajo</h6>
+                            <span class="badge bg-warning">Importante</span>
+                        </div>
+                        <p class="mb-1">Productos que necesitan reposición urgente.</p>
+                    </a>
+
+                    <a href="{{ url_for('main.reports_inventory_by_category') }}" class="list-group-item list-group-item-action" target="_blank" id="btnInventarioCategoria">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1"><i class="fas fa-chart-pie me-2"></i>Inventario por Categoría</h6>
+                        </div>
+                        <p class="mb-1">Distribución del inventario por categorías.</p>
+                    </a>
+
+                    <a href="{{ url_for('main.reports_inventory_stock_valuation') }}" class="list-group-item list-group-item-action" target="_blank" id="btnValorizacionStock">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1"><i class="fas fa-dollar-sign me-2"></i>Valorización de Stock</h6>
+                        </div>
+                        <p class="mb-1">Valor total del inventario actual.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Reportes Financieros -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-money-bill-wave me-2"></i>Reportes Financieros</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action" id="btnFlujoCaja" data-bs-toggle="modal" data-bs-target="#modalFlujoCaja">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1"><i class="fas fa-cash-register me-2"></i>Flujo de Caja</h6>
+                        </div>
+                        <p class="mb-1">Ingresos y egresos por período.</p>
+                    </a>
+
+                    <a href="#" class="list-group-item list-group-item-action" id="btnRentabilidad" data-bs-toggle="modal" data-bs-target="#modalRentabilidad">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1"><i class="fas fa-percent me-2"></i>Rentabilidad</h6>
+                        </div>
+                        <p class="mb-1">Análisis de márgenes de ganancia.</p>
+                    </a>
+
+                    <a href="#" class="list-group-item list-group-item-action" id="btnComprasProveedor" data-bs-toggle="modal" data-bs-target="#modalComprasProveedor">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1"><i class="fas fa-truck me-2"></i>Compras por Proveedor</h6>
+                        </div>
+                        <p class="mb-1">Análisis de compras y proveedores.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reportes RG90 -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-file-alt me-2"></i>Reportes RG90</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#modalExportarVentasRG90">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1"><i class="fas fa-download me-2"></i>Exportar Ventas RG90</h6>
+                            <span class="badge bg-success">SET</span>
+                        </div>
+                        <p class="mb-1">Archivo de ventas en formato SET para presentación y verificación de integridad de datos RG90.</p>
+                    </a>
+
+                    <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#modalExportarComprasRG90">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1"><i class="fas fa-download me-2"></i>Exportar Compras RG90</h6>
+                            <span class="badge bg-success">SET</span>
+                        </div>
+                        <p class="mb-1">Archivo de compras en formato SET para presentación y verificación de integridad de datos RG90.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modales -->
+{% include 'reports/flujo_caja_modal.html' %}
+{% include 'reports/rentabilidad_modal.html' %}
+{% include 'reports/compras_proveedor_modal.html' %}
+
+<!-- Modal Exportar Ventas RG90 -->
+<div class="modal fade" id="modalExportarVentasRG90" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Exportar Ventas RG90</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <label>Período (MMYYYY):</label>
+        <input type="text" class="form-control" id="inputPeriodoVentas" placeholder="Ej: 072025" maxlength="6">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" id="btnExportarVentasRG90">Exportar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Exportar Compras RG90 -->
+<div class="modal fade" id="modalExportarComprasRG90" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Exportar Compras RG90</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <label>Período (MMYYYY):</label>
+        <input type="text" class="form-control" id="inputPeriodoCompras" placeholder="Ej: 072025" maxlength="6">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" id="btnExportarComprasRG90">Exportar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/financial.js') }}"></script>
+<script src="{{ url_for('static', filename='js/rg90_export.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-plus-circle me-2"></i>Nueva Venta</h2>
+    <a href="{{ url_for('main.sales_list') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Volver
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-receipt me-2"></i>Información de la Venta</h5>
+            </div>
+            <div class="card-body">
+                <form id="saleForm" autocomplete="off">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Número de Factura</label>
+                            <input type="text" id="invoiceNumber" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Cliente (RUC)</label>
+                            <input type="text" id="customerRuc" class="form-control" placeholder="Ingresar RUC">
+                            <small id="customerName" class="text-muted"></small>
+                            <input type="hidden" id="customerId" value="">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Pago Efectivo</label>
+                            <input type="number" id="paymentCash" class="form-control" min="0" step="100" value="0">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Pago Tarjeta</label>
+                            <input type="number" id="paymentCard" class="form-control" min="0" step="100" value="0">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Diferencia de Pago</label>
+                            <input type="text" id="paymentDifference" class="form-control" readonly>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Observaciones</label>
+                        <input type="text" id="notes" class="form-control" placeholder="Observaciones opcionales">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5><i class="fas fa-boxes me-2"></i>Productos</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <label class="form-label">Buscar por código o nombre</label>
+                        <input type="search" id="productSearch" class="form-control" placeholder="Buscar producto...">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Cantidad</label>
+                        <input type="number" id="quantity" class="form-control" min="1" value="1">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">&nbsp;</label>
+                        <button type="button" id="addProduct" class="btn btn-primary d-block w-100">
+                            <i class="fas fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="productsTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Producto</th>
+                                <th>Cant.</th>
+                                <th>P. Unitario</th>
+                                <th>IVA</th>
+                                <th>Subtotal</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div id="emptyProducts" class="text-center py-4 text-muted">
+                    <i class="fas fa-box-open fa-2x mb-2"></i>
+                    <p>No hay productos agregados a la venta</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-calculator me-2"></i>Totales</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-6">Subtotal:</div>
+                    <div class="col-6 text-end" id="subtotalDisplay">₲ 0</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6">IVA 5%:</div>
+                    <div class="col-6 text-end" id="iva5Display">₲ 0</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6">IVA 10%:</div>
+                    <div class="col-6 text-end" id="iva10Display">₲ 0</div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-6"><strong>TOTAL:</strong></div>
+                    <div class="col-6 text-end"><strong id="totalDisplay">₲ 0</strong></div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" id="completeSale" class="btn btn-success w-100" disabled>
+                    <i class="fas fa-check me-2"></i>Completar Venta
+                </button>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6><i class="fas fa-bolt me-2"></i>Acciones Rápidas</h6>
+            </div>
+            <div class="card-body">
+                <a href="{{ url_for('main.customers_new') }}" class="btn btn-outline-primary btn-sm w-100 mb-2">
+                    <i class="fas fa-user-plus me-2"></i>Nuevo Cliente
+                </a>
+                <a href="{{ url_for('main.products_new') }}" class="btn btn-outline-info btn-sm w-100">
+                    <i class="fas fa-box me-2"></i>Nuevo Producto
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="successModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="fas fa-check-circle me-2"></i>Venta Completada</h5>
+            </div>
+            <div class="modal-body">
+                <p>La venta se ha registrado exitosamente.</p>
+                <p><strong>Factura:</strong> <span id="completedInvoiceNumber"></span></p>
+                <p><strong>Vuelto:</strong> <span id="modalChangeDisplay">₲ 0</span></p>
+                <p hidden id="completedSaleId"></p> <!-- ID para imprimir -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="location.reload()">Nueva Venta</button>
+                <button type="button" class="btn btn-primary" id="printInvoice">Ver Factura PDF</button>
+                <a href="{{ url_for('main.sales_list') }}" class="btn btn-success">Ver Ventas</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  window.products = {{ product_list|tojson }};
+</script>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/ventas.js') }}"></script>
+{% endblock %}

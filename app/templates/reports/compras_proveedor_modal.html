@@ -1,0 +1,28 @@
+<div class="modal fade" id="modalComprasProveedor" tabindex="-1" aria-labelledby="modalComprasProveedorLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="formComprasProveedor" method="POST" action="{{ url_for('main.reports_financial_purchases_by_supplier') }}" target="_blank">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalComprasProveedorLabel">Reporte Compras por Proveedor</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <label for="supplier_select" class="form-label">Proveedor</label>
+          <select class="form-select" id="supplier_select" name="supplier_id">
+            <option value="">-- Seleccionar Proveedor --</option>
+            {% for supplier in suppliers %}
+              <option value="{{ supplier.id }}">{{ supplier.name }} - RUC: {{ supplier.ruc }}</option>
+            {% endfor %}
+          </select>
+          <div class="form-check mt-3">
+            <input class="form-check-input" type="checkbox" id="allSuppliers" name="include_all" value="true">
+            <label class="form-check-label" for="allSuppliers">Incluir todos los proveedores</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Exportar PDF</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

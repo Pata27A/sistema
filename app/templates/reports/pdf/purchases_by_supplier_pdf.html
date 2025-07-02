@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Compras por Proveedor</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 12px; }
+        h2 { text-align: center; margin-bottom: 0; }
+        h4 { margin-top: 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { border: 1px solid #333; padding: 6px; text-align: left; }
+        th { background-color: #eee; }
+        td.right { text-align: right; }
+    </style>
+</head>
+<body>
+    <h2>Reporte de Compras por Proveedor</h2>
+    {% if not include_all and supplier %}
+    <h4>Proveedor: {{ supplier.name }} - RUC: {{ supplier.ruc }}</h4>
+    {% else %}
+    <h4>Todos los proveedores</h4>
+    {% endif %}
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Proveedor</th>
+                <th>RUC</th>
+                <th>Teléfono</th>
+                <th>Factura Nº</th>
+                <th>Fecha</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th class="right">Precio Unitario (PYG)</th>
+                <th class="right">Subtotal (PYG)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for purchase, supplier in compras if include_all %}
+                {% for detail in purchase.details %}
+                <tr>
+                    <td>{{ supplier.name }}</td>
+                    <td>{{ supplier.ruc }}</td>
+                    <td>{{ supplier.phone or 'N/A' }}</td>
+                    <td>{{ purchase.invoice_number }}</td>
+                    <td>{{ purchase.purchase_date.strftime('%d/%m/%Y') }}</td>
+                    <td>{{ detail.product.name }}</td>
+                    <td>{{ detail.quantity }}</td>
+                    <td class="right">{{ detail.unit_price | guaranies }}</td>
+                    <td class="right">{{ detail.subtotal | guaranies }}</td>
+                </tr>
+                {% endfor %}
+            {% endfor %}
+
+            {% if not include_all %}
+                {% for purchase in compras %}
+                    {% for detail in purchase.details %}
+                    <tr>
+                        <td>{{ supplier.name }}</td>
+                        <td>{{ supplier.ruc }}</td>
+                        <td>{{ supplier.phone or 'N/A' }}</td>
+                        <td>{{ purchase.invoice_number }}</td>
+                        <td>{{ purchase.purchase_date.strftime('%d/%m/%Y') }}</td>
+                        <td>{{ detail.product.name }}</td>
+                        <td>{{ detail.quantity }}</td>
+                        <td class="right">{{ detail.unit_price | guaranies }}</td>
+                        <td class="right">{{ detail.subtotal | guaranies }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</body>
+</html>

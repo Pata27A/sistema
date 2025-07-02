@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-truck me-2"></i>Proveedores</h2>
+    <a href="{{ url_for('main.suppliers_new') }}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i>Nuevo Proveedor
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6">
+                <form method="GET" class="d-flex">
+                    <input type="text" name="search" class="form-control me-2" placeholder="Buscar por nombre..." value="{{ search }}">
+                    <button type="submit" class="btn btn-outline-secondary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card-body">
+        {% if suppliers.items %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nombre/Razón Social</th>
+                            <th>RUC</th>
+                            <th>Teléfono</th>
+                            <th>Contacto</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for supplier in suppliers.items %}
+                        <tr>
+                            <td>{{ supplier.name }}</td>
+                            <td>{{ supplier.ruc }}</td>
+                            <td>{{ supplier.phone or '-' }}</td>
+                            <td>{{ supplier.contact_person or '-' }}</td>
+                            <td>
+                                {% if supplier.is_active %}
+                                    <span class="badge bg-success">Activo</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Inactivo</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('main.suppliers_edit', id=supplier.id) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if suppliers.pages > 1 %}
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if suppliers.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('main.suppliers_list', page=suppliers.prev_num, search=search) }}">Anterior</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for page in suppliers.iter_pages() %}
+                        {% if page %}
+                            {% if page != suppliers.page %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('main.suppliers_list', page=page, search=search) }}">{{ page }}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ page }}</span>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if suppliers.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('main.suppliers_list', page=suppliers.next_num, search=search) }}">Siguiente</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-truck fa-3x text-muted mb-3"></i>
+                <h5>No se encontraron proveedores</h5>
+                <p class="text-muted">
+                    {% if search %}
+                        No hay proveedores que coincidan con "{{ search }}"
+                    {% else %}
+                        Comienza agregando tu primer proveedor
+                    {% endif %}
+                </p>
+                <a href="{{ url_for('main.suppliers_new') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Agregar Proveedor
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

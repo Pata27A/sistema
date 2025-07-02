@@ -1,0 +1,384 @@
+/* Custom styles for Ferretería Management System */
+
+/* General Improvements */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Sidebar and Navigation */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.navbar-nav .nav-link {
+    transition: color 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffc107 !important;
+}
+
+/* Cards */
+.card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    font-weight: 600;
+}
+
+/* Tables */
+.table th {
+    background-color: #f8f9fa;
+    border-top: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Buttons */
+.btn {
+    border-radius: 0.375rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.775rem;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    border-radius: 0.375rem;
+    border: 1px solid #ced4da;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* Badges */
+.badge {
+    font-weight: 500;
+    border-radius: 0.375rem;
+}
+
+/* Dashboard specific styles */
+.dashboard-card {
+    transition: transform 0.2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Alert customization */
+.alert {
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+
+.alert-dismissible .btn-close {
+    padding: 0.75rem 1rem;
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* Product list specific */
+.product-code {
+    font-family: 'Courier New', monospace;
+    background-color: #f8f9fa;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+
+/* Stock alerts */
+.stock-low {
+    background-color: #fff3cd !important;
+    border-left: 4px solid #ffc107;
+}
+
+.stock-critical {
+    background-color: #f8d7da !important;
+    border-left: 4px solid #dc3545;
+}
+
+/* Invoice styles */
+.invoice-header {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    padding: 2rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.invoice-total {
+    background-color: #f8f9fa;
+    border: 2px solid #007bff;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+/* Currency formatting */
+.currency {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+    
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    .d-md-flex {
+        flex-direction: column !important;
+    }
+    
+    .navbar-nav {
+        text-align: center;
+    }
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .navbar,
+    .btn,
+    .card-footer {
+        display: none !important;
+    }
+    
+    .card {
+        border: none !important;
+        box-shadow: none !important;
+    }
+    
+    body {
+        background: white !important;
+    }
+}
+
+/* Animation classes */
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+}
+
+/* Success/Error states */
+.success-state {
+    border-left: 4px solid #28a745;
+    background-color: #d4edda;
+}
+
+.error-state {
+    border-left: 4px solid #dc3545;
+    background-color: #f8d7da;
+}
+
+.warning-state {
+    border-left: 4px solid #ffc107;
+    background-color: #fff3cd;
+}
+
+/* Custom scrollbar */
+.custom-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #6c757d #f1f3f4;
+}
+
+.custom-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+    background: #f1f3f4;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+    background-color: #6c757d;
+    border-radius: 3px;
+}
+
+/* Utility classes */
+.text-guarani {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+}
+
+.bg-light-blue {
+    background-color: #e3f2fd !important;
+}
+
+.border-left-primary {
+    border-left: 4px solid #007bff !important;
+}
+
+.border-left-success {
+    border-left: 4px solid #28a745 !important;
+}
+
+.border-left-warning {
+    border-left: 4px solid #ffc107 !important;
+}
+
+.border-left-danger {
+    border-left: 4px solid #dc3545 !important;
+}
+
+/* Search and filter improvements */
+.search-highlight {
+    background-color: #fff3cd;
+    padding: 0.1rem 0.2rem;
+    border-radius: 0.25rem;
+}
+
+.filter-active {
+    background-color: #007bff !important;
+    color: white !important;
+}
+
+/* Sales form specific styles */
+.products-table {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.product-row {
+    transition: background-color 0.2s ease;
+}
+
+.product-row:hover {
+    background-color: #f8f9fa;
+}
+
+.total-section {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+}
+
+/* Modal improvements */
+.modal-header {
+    border-bottom: 2px solid #dee2e6;
+}
+
+.modal-footer {
+    border-top: 2px solid #dee2e6;
+}
+
+/* Cash register specific */
+.cash-movement-ingreso {
+    border-left: 4px solid #28a745;
+}
+
+.cash-movement-egreso {
+    border-left: 4px solid #dc3545;
+}
+
+/* Reports section */
+.report-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.report-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Error pages */
+.error-template {
+    padding: 40px 15px;
+    text-align: center;
+}
+
+.error-template h1 {
+    font-size: 8rem;
+    font-weight: bold;
+    line-height: 1;
+    margin-bottom: 20px;
+}
+
+.error-template h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.error-details {
+    margin-bottom: 30px;
+}
+
+.error-actions {
+    margin-top: 30px;
+}
+
+.error-actions .btn {
+    margin: 0 10px;
+}

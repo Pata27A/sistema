@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Datos de la Empresa{% endblock %}
+
+{% block content %}
+<h3 class="mb-4"><i class="fas fa-building me-2"></i>Datos de la Empresa</h3>
+<form method="POST">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label>Nombre</label>
+            <input type="text" name="nombre" class="form-control" value="{{ empresa.nombre if empresa else '' }}" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label>RUC</label>
+            <input type="text" name="ruc" class="form-control" value="{{ empresa.ruc if empresa else '' }}" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label>Dirección</label>
+            <input type="text" name="direccion" class="form-control" value="{{ empresa.direccion if empresa else '' }}" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label>Ciudad</label>
+            <input type="text" name="ciudad" class="form-control" value="{{ empresa.ciudad if empresa else '' }}" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label>Teléfono</label>
+            <input type="text" name="telefono" class="form-control" value="{{ empresa.telefono if empresa else '' }}">
+        </div>
+        <div class="col-md-6 mb-3">
+            <label>Moneda</label>
+            <select name="moneda" class="form-control">
+                <option value="PYG" {% if empresa and empresa.moneda == 'PYG' %}selected{% endif %}>Guaraní (PYG)</option>
+                <option value="USD" {% if empresa and empresa.moneda == 'USD' %}selected{% endif %}>Dólar (USD)</option>
+                <option value="BRL" {% if empresa and empresa.moneda == 'BRL' %}selected{% endif %}>Real (BRL)</option>
+            </select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label>Establecimiento</label>
+            <input type="text" name="establecimiento" class="form-control" maxlength="3" value="{{ empresa.establecimiento if empresa else '001' }}" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label>Punto de Expedición</label>
+            <input type="text" name="punto_expedicion" class="form-control" maxlength="3" value="{{ empresa.punto_expedicion if empresa else '001' }}" required>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label>Timbrado Nº</label>
+            <input type="text" name="timbrado_numero" class="form-control" value="{{ empresa.timbrado_numero if empresa else '' }}" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label>Vigencia Desde</label>
+            <input type="date" name="timbrado_vigencia_desde" class="form-control" value="{{ empresa.timbrado_vigencia_desde if empresa else '' }}" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label>Vigencia Hasta</label>
+            <input type="date" name="timbrado_vigencia_hasta" class="form-control" value="{{ empresa.timbrado_vigencia_hasta if empresa else '' }}" required>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i>Guardar</button>
+</form>
+{% endblock %}

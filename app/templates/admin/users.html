@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-users-cog me-2"></i>Administración de Usuarios</h2>
+    <a href="{{ url_for('main.admin_users_new') }}" class="btn btn-primary">
+        <i class="fas fa-user-plus me-2"></i>Nuevo Usuario
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        {% if users %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Nombre Completo</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th>Creado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>
+                                <strong>{{ user.username }}</strong>
+                                {% if user.id == current_user.id %}
+                                    <span class="badge bg-info ms-1">Tú</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                {% if user.role %}
+                                    <span class="badge bg-secondary">{{ user.role.description }}</span>
+                                {% else %}
+                                    <span class="text-muted">Sin rol</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.is_active %}
+                                    <span class="badge bg-success">Activo</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inactivo</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ user.created_at.strftime('%d/%m/%Y') }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ url_for('main.admin_users_edit', id=user.id) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    {% if user.id != current_user.id %}
+                                        <button class="btn btn-sm btn-outline-warning" onclick="toggleUserStatus({{ user.id }}, {{ user.is_active|lower }})">
+                                            {% if user.is_active %}
+                                                <i class="fas fa-user-slash"></i>
+                                            {% else %}
+                                                <i class="fas fa-user-check"></i>
+                                            {% endif %}
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                <h5>No hay usuarios registrados</h5>
+                <p class="text-muted">Comienza agregando usuarios al sistema.</p>
+                <a href="{{ url_for('main.admin_users_new') }}" class="btn btn-primary">
+                    <i class="fas fa-user-plus me-2"></i>Agregar Usuario
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- User Stats -->
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4>{{ users|selectattr('is_active')|list|length }}</h4>
+                        <p class="mb-0">Usuarios Activos</p>
+                    </div>
+                    <i class="fas fa-user-check fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4>{{ users|selectattr('role.name', 'equalto', 'admin')|list|length }}</h4>
+                        <p class="mb-0">Administradores</p>
+                    </div>
+                    <i class="fas fa-user-shield fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4>{{ users|selectattr('role.name', 'equalto', 'vendedor')|list|length }}</h4>
+                        <p class="mb-0">Vendedores</p>
+                    </div>
+                    <i class="fas fa-user-tie fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4>{{ users|selectattr('role.name', 'equalto', 'cajero')|list|length }}</h4>
+                        <p class="mb-0">Cajeros</p>
+                    </div>
+                    <i class="fas fa-cash-register fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Role Information -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-info-circle me-2"></i>Información de Roles</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-user-shield me-2"></i>Administrador</h6>
+                        <ul class="small">
+                            <li>Acceso completo al sistema</li>
+                            <li>Gestión de usuarios</li>
+                            <li>Configuración del sistema</li>
+                            <li>Todos los reportes</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-user-tie me-2"></i>Vendedor</h6>
+                        <ul class="small">
+                            <li>Gestión de ventas</li>
+                            <li>Gestión de clientes</li>
+                            <li>Consulta de productos</li>
+                            <li>Reportes de ventas</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-cash-register me-2"></i>Cajero</h6>
+                        <ul class="small">
+                            <li>Gestión de ventas</li>
+                            <li>Gestión de caja</li>
+                            <li>Consulta de productos</li>
+                            <li>Reportes básicos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleUserStatus(userId, currentStatus) {
+    const action = currentStatus ? 'desactivar' : 'activar';
+    if (confirm(`¿Está seguro que desea ${action} este usuario?`)) {
+        // Here you would make an AJAX call to toggle user status
+        fetch(`/admin/users/${userId}/toggle`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrf_token]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error al cambiar el estado del usuario');
+            }
+        });
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Ventas por Cliente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            margin: 20px;
+            color: #333;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        header img {
+            max-height: 80px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 20px;
+            color: #007bff;
+        }
+        .info {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .info p {
+            margin: 3px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+        th, td {
+            padding: 6px 8px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+        .cliente-detalle {
+            margin-bottom: 20px;
+        }
+        .cliente-detalle h3 {
+            background-color: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+        .detalle-table {
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+        .detalle-table th, .detalle-table td {
+            font-size: 11px;
+            padding: 4px 6px;
+        }
+        .chart-container {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .footer {
+            text-align: right;
+            font-size: 10px;
+            color: #666;
+            border-top: 1px solid #ccc;
+            padding-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Empresa" />
+        <h1>Ventas por Cliente</h1>
+    </header>
+
+    <div class="info">
+        <p><strong>Fecha:</strong> {{ fecha_desde.strftime('%d/%m/%Y') }} a {{ fecha_hasta.strftime('%d/%m/%Y') }}</p>
+        {% if cliente_filtrado %}
+        <p><strong>Cliente:</strong> {{ cliente_filtrado.nombre }}</p>
+        {% else %}
+        <p><strong>Todos los Clientes</strong></p>
+        {% endif %}
+        <p><strong>Generado por:</strong> {{ usuario }}</p>
+        <p><strong>Fecha generación:</strong> {{ fecha_generacion.strftime('%d/%m/%Y %H:%M:%S') }}</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Cantidad de Facturas</th>
+                <th>Total Vendido (₲)</th>
+                <th>Última Compra</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+            <tr>
+                <td style="text-align: left;">{{ cliente.nombre }}</td>
+                <td>{{ cliente.cantidad_facturas }}</td>
+                <td>₲ {{ "{:,.0f}".format(cliente.total_vendido) }}</td>
+                <td>{{ cliente.ultima_compra.strftime('%d/%m/%Y') if cliente.ultima_compra else '-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if mostrar_detalle %}
+        {% for cliente in clientes %}
+        <div class="cliente-detalle">
+            <h3>Detalle de facturas - {{ cliente.nombre }}</h3>
+            <table class="detalle-table">
+                <thead>
+                    <tr>
+                        <th>N° Factura</th>
+                        <th>Fecha</th>
+                        <th>Total (₲)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for factura in cliente.facturas %}
+                    <tr>
+                        <td>{{ factura.numero }}</td>
+                        <td>{{ factura.fecha.strftime('%d/%m/%Y') }}</td>
+                        <td>₲ {{ "{:,.0f}".format(factura.total) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if chart_base64 %}
+    <div class="chart-container">
+        <img src="data:image/png;base64,{{ chart_base64 }}" alt="Gráfico de pastel - Ventas por Cliente" />
+    </div>
+    {% endif %}
+
+    <div class="footer">
+        <small>Reporte generado automáticamente - Sistema de Gestión</small>
+    </div>
+</body>
+</html>

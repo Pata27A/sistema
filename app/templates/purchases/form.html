@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-plus-circle me-2"></i>Nueva Compra</h2>
+    <a href="{{ url_for('main.purchases_list') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Volver
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <!-- Información de la compra -->
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-file-invoice me-2"></i>Información de la Compra</h5>
+            </div>
+            <div class="card-body">
+                <form id="purchaseForm" autocomplete="off">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Número de Factura <span class="text-danger">*</span></label>
+                            <input type="text" id="invoiceNumber" class="form-control" placeholder="001-001-0000001" required>
+                        </div>
+                        <div class="col-md-6 position-relative">
+                            <label class="form-label">Proveedor <span class="text-danger">*</span></label>
+                            <input type="text" id="supplierSearch" class="form-control" placeholder="Buscar por nombre o RUC..." autocomplete="off">
+                            <ul class="list-group position-absolute w-100 zindex-dropdown" id="supplierResults" style="z-index:1050;"></ul>
+                            <input type="hidden" id="supplierId">
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label class="form-label">Observaciones</label>
+                        <textarea id="notes" class="form-control" rows="2" placeholder="Observaciones opcionales"></textarea>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Productos -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5><i class="fas fa-boxes me-2"></i>Productos</h5>
+            </div>
+            <div class="card-body">
+                <div class="position-relative mb-3">
+                    <label class="form-label">Buscar Producto por Código</label>
+                    <input type="text" id="productSearch" class="form-control" placeholder="Ej: 123ABC..." autocomplete="off">
+                    <ul class="list-group position-absolute w-100 zindex-dropdown" id="productResults" style="z-index:1050;"></ul>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Cantidad</label>
+                        <input type="number" id="quantity" class="form-control" min="1" value="1">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Precio Unit.</label>
+                        <input type="number" id="unitPrice" class="form-control" min="0" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="col-md-4 d-grid align-items-end">
+                        <button type="button" id="addProduct" class="btn btn-primary mt-2">
+                            <i class="fas fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="productsTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Producto</th>
+                                <th>Cant.</th>
+                                <th>P. Unitario</th>
+                                <th>IVA</th>
+                                <th>Subtotal</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div id="emptyProducts" class="text-center py-4 text-muted">
+                    <i class="fas fa-box-open fa-2x mb-2"></i>
+                    <p>No hay productos agregados a la compra</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Totales -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-calculator me-2"></i>Totales</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-6">Subtotal:</div>
+                    <div class="col-6 text-end" id="subtotalDisplay">₲ 0</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6">IVA 5%:</div>
+                    <div class="col-6 text-end" id="iva5Display">₲ 0</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6">IVA 10%:</div>
+                    <div class="col-6 text-end" id="iva10Display">₲ 0</div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-6"><strong>TOTAL:</strong></div>
+                    <div class="col-6 text-end"><strong id="totalDisplay">₲ 0</strong></div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" id="completePurchase" class="btn btn-primary w-100" disabled>
+                    <i class="fas fa-check me-2"></i>Registrar Compra
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de éxito -->
+<div class="modal fade" id="successModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="fas fa-check-circle me-2"></i>Compra Registrada</h5>
+            </div>
+            <div class="modal-body">
+                <p>La compra se ha registrado exitosamente.</p>
+                <p><strong>Factura:</strong> <span id="completedInvoiceNumber"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="location.reload()">Nueva Compra</button>
+                <a href="{{ url_for('main.purchases_list') }}" class="btn btn-primary">Ver Compras</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/compras.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Valorización de Stock</title>
+<style>
+  body { font-family: Arial, sans-serif; font-size: 12px; margin: 20px; color: #333; }
+  header { text-align: center; margin-bottom: 20px; }
+  h1 { color: #28a745; }
+  table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+  th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: center; }
+  th { background-color: #28a745; color: white; }
+  tfoot tr { font-weight: bold; background-color: #e9f7ef; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Valorización de Stock</h1>
+  <p>Generado por: {{ user.username }} - {{ fecha_generacion.strftime('%d/%m/%Y %H:%M:%S') }}</p>
+</header>
+
+<table>
+  <thead>
+    <tr>
+      <th>Código</th>
+      <th>Producto</th>
+      <th>Stock Actual</th>
+      <th>Precio Venta (₲)</th>
+      <th>Valor Total (₲)</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in productos %}
+    <tr>
+      <td>{{ p.code }}</td>
+      <td style="text-align:left;">{{ p.name }}</td>
+      <td>{{ p.stock_current }}</td>
+      <td>₲ {{ "{:,.2f}".format(p.sale_price) }}</td>
+      <td>₲ {{ "{:,.2f}".format(p.stock_current * p.sale_price) }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="4">Valor Total del Inventario</td>
+      <td>₲ {{ "{:,.2f}".format(total_valor) }}</td>
+    </tr>
+  </tfoot>
+</table>
+</body>
+</html>
+

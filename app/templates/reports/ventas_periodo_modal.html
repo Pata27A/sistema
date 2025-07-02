@@ -1,0 +1,39 @@
+<!-- Modal Ventas por Período -->
+<div class="modal fade" id="modalVentasPeriodo" tabindex="-1" aria-labelledby="ventasPeriodoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ventasPeriodoLabel"><i class="fas fa-calendar-alt me-2"></i>Ventas por Período</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <form id="formVentasPeriodo" method="GET" action="{{ url_for('main.reports_sales_period') }}">
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="start_date" class="form-label">Desde</label>
+              <input type="date" name="start_date" id="start_date" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label for="end_date" class="form-label">Hasta</label>
+              <input type="date" name="end_date" id="end_date" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label for="cliente" class="form-label">Cliente (opcional)</label>
+              <input type="text" name="cliente" id="cliente" class="form-control" placeholder="Nombre o RUC">
+            </div>
+            <div class="col-md-6">
+              <label for="vendedor" class="form-label">Vendedor (opcional)</label>
+              <input type="text" name="vendedor" id="vendedor" class="form-control" placeholder="Nombre de usuario">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-file-pdf me-2"></i>Exportar PDF
+          </button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-chart-line me-2"></i>Dashboard</h2>
+    <span class="text-muted">{{ moment.strftime('%d/%m/%Y %H:%M') if moment else '' }}</span>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ today_sales_count }}</h4>
+                        <p class="mb-0">Ventas Hoy</p>
+                    </div>
+                    <i class="fas fa-shopping-cart fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ today_revenue|currency }}</h4>
+                        <p class="mb-0">Ingresos Hoy</p>
+                    </div>
+                    <i class="fas fa-dollar-sign fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ low_stock_products|length }}</h4>
+                        <p class="mb-0">Stock Bajo</p>
+                    </div>
+                    <i class="fas fa-exclamation-triangle fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4>{{ recent_sales|length }}</h4>
+                        <p class="mb-0">Ventas Recientes</p>
+                    </div>
+                    <i class="fas fa-receipt fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-exclamation-triangle me-2"></i>Productos con Stock Bajo</h5>
+            </div>
+            <div class="card-body">
+                {% if low_stock_products %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Producto</th>
+                                    <th>Stock</th>
+                                    <th>Mínimo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for product in low_stock_products %}
+                                <tr>
+                                    <td>{{ product.code }}</td>
+                                    <td>{{ product.name }}</td>
+                                    <td>
+                                        <span class="badge bg-warning">{{ product.stock_current }}</span>
+                                    </td>
+                                    <td>{{ product.stock_min }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No hay productos con stock bajo.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-clock me-2"></i>Ventas Recientes</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_sales %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Factura</th>
+                                    <th>Cliente</th>
+                                    <th>Total</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for sale in recent_sales %}
+                                <tr>
+                                    <td>{{ sale.invoice_number }}</td>
+                                    <td>{{ sale.customer.name if sale.customer else 'Cliente Ocasional' }}</td>
+                                    <td>{{ sale.total|currency }}</td>
+                                    <td>{{ sale.sale_date.strftime('%d/%m %H:%M') }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No hay ventas recientes.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-plus me-2"></i>Acciones Rápidas</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <a href="{{ url_for('main.sales_new') }}" class="btn btn-success w-100 mb-2">
+                            <i class="fas fa-plus me-2"></i>Nueva Venta
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('main.purchases_new') }}" class="btn btn-primary w-100 mb-2">
+                            <i class="fas fa-shopping-cart me-2"></i>Nueva Compra
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('main.products_new') }}" class="btn btn-info w-100 mb-2">
+                            <i class="fas fa-box me-2"></i>Nuevo Producto
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('main.customers_new') }}" class="btn btn-secondary w-100 mb-2">
+                            <i class="fas fa-user-plus me-2"></i>Nuevo Cliente
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

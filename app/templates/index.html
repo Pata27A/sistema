@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="text-center mb-5">
+            <i class="fas fa-tools display-1 text-primary mb-4"></i>
+            <h1 class="display-4 mb-3">Sistema de Gestión para Ferretería</h1>
+            <p class="lead">Control completo de inventario, ventas y cumplimiento RG90 para Paraguay</p>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-boxes fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Gestión de Inventario</h5>
+                        <p class="card-text">Control de stock, productos y categorías con alertas de stock mínimo.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-receipt fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Facturación RG90</h5>
+                        <p class="card-text">Facturación compliant con RG90, cálculo automático de IVA y reportes.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-chart-line fa-3x text-info mb-3"></i>
+                        <h5 class="card-title">Reportes y Analytics</h5>
+                        <p class="card-text">Reportes de ventas, compras y análisis de rentabilidad.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+                <a href="{{ url_for('main.login') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
