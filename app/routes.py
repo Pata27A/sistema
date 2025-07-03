@@ -673,7 +673,7 @@ def admin_users():
 
 @main_bp.route('/admin/users/new', methods=['GET', 'POST'])
 @login_required
-def admin_users_new():
+def admin_users_newa():
     if not current_user.role or current_user.role.name != 'admin':
         abort(403)
     form = UserForm()
@@ -1162,3 +1162,44 @@ def rg90_download(filename):
         return "Archivo no encontrado", 404
 
     return send_from_directory(carpeta, filename, as_attachment=True)
+
+
+#------------Users-------------------
+@main_bp.route('/admin/users/<int:id>/edit', methods=['GET', 'POST'])
+@login_required
+def admin_users_edit(id):
+    user = User.query.get_or_404(id)
+    form = UserForm(obj=user)
+    if request.method == 'POST' and form.validate_on_submit():
+        user.username = form.username.data
+        user.email = form.email.data
+        user.first_name = form.first_name.data
+        user.last_name = form.last_name.data
+        user.role_id = form.role_id.data
+        user.is_active = form.is_active.data
+        if form.password.data:
+            user.set_password(form.password.data)
+        db.session.commit()
+        flash('Usuario actualizado correctamente', 'success')
+        return redirect(url_for('main.admin_users'))
+    return render_template('admin/user_form.html', form=form, title='Editar Usuario')
+
+@main_bp.route('/admin/users/new', methods=['GET', 'POST'])
+@login_required
+def admin_users_new():
+    form = UserForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        user = User(
+            username=form.username.data,
+            email=form.email.data,
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
+            role_id=form.role_id.data,
+            is_active=form.is_active.data
+        )
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Usuario creado correctamente', 'success')
+        return redirect(url_for('main.admin_users'))
+    return render_template('admin/user_form.html', form=form, title='Nuevo Usuario')

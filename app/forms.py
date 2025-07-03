@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, DecimalField, IntegerField, SelectField, BooleanField, PasswordField, DateTimeField, HiddenField
 from wtforms.validators import DataRequired, Email, Length, NumberRange, Optional, ValidationError
-from app.models import User, Customer, Supplier, Product, Category
+from app.models import User, Customer, Supplier, Product, Category,Role
 import re
 
 class LoginForm(FlaskForm):
@@ -116,7 +116,7 @@ class UserForm(FlaskForm):
     
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
-        from models import Role
+        from app.models import Role
         self.role_id.choices = [(r.id, r.description) for r in Role.query.all()]
 
 class CashMovementForm(FlaskForm):
